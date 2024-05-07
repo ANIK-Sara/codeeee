@@ -1,0 +1,159 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    
+
+    <title>Multiple user login</title>
+  </head>
+  <body>
+  <div class="content">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-6 contents">
+          <div class="row justify-content-center">
+            <div class="col-md-12">
+              <div class="form-block">
+                  <div class="mb-4">
+                      <h1>User Registration page</h1>
+                </div>
+                  <span class="mb-0 text-muted">
+                {% if msg %}
+                    {{ msg | safe }}
+                {% else %}
+                    Login page
+                {% endif %}
+              </span>
+                <!-- Formulaire HTML -->
+                <form method="post">
+                    {% csrf_token %}
+                    <!-- Champs de base -->
+                    <div class="form-group">
+                      <label for="username">Nom d'utilisateur</label>
+                      {{ form.username }}
+                    </div>
+                    <div class="form-group">
+                        <label pour="password1">Mot de passe</label>
+                        {{ form.password1 }}  <!-- Ajoutez ce champ -->
+                    </div>
+                    <div class="form-group">
+                        <label pour="password2">Confirmer le mot de passe</label>
+                        {{ form.password2 }}  <!-- Ajoutez ce champ -->
+                    </div>
+                    <div class="form-group">
+                      <label pour="email">Email</label>
+                      {{ form.email }}
+                    </div>
+                    <div class="form-group">
+                      <label pour="num_tel">Numéro de téléphone</label>
+                      {{ form.num_tel }}
+                    </div>
+                    <div class="form-group">
+                      <label pour="adresse">Adresse</label>
+                      {{ form.adresse }}
+                    </div>
+                    
+                    <!-- Choix de rôle -->
+                    <div class="form-group">
+                      <label>Rôle</label>
+                      {{ form.is_medecin }} Médecin
+                      {{ form.is_pharmacie }} Pharmacie
+                      {{ form.is_patient }} Patient
+                    </div>
+                  
+                    <!-- Champs spécifiques au patient -->
+                    <div id="patient_fields" style="display: none;">
+                      <div class="form-group">
+                        <label pour="sexe">Sexe</label>
+                        {{ form.sexe }}
+                      </div>
+                      <div class="form-group">
+                        <label pour="date_naissance">Date de naissance</label>
+                        {{ form.date_naissance }}
+                      </div>
+                    </div>
+                  
+                    <!-- Champs spécifiques au médecin -->
+                    <div id="medecin_fields" style="display: none;">
+                      <div class="form-group">
+                        <label pour="adresse_cabinet">Adresse du cabinet</label>
+                        {{ form.adresse_cabinet }}
+                      </div>
+                      <div class="form-group">
+                        <label pour="heure_ouverture">Heure d'ouverture</label>
+                        {{ form.heure_ouverture }}
+                      </div>
+                      <div class="form-group">
+                        <label pour="heure_fermeture">Heure de fermeture</label>
+                        {{ form.heure_fermeture }}
+                      </div>
+                      <div class="form-group">
+                        <label pour="jours_travail">Jours de travail</label>
+                        {{ form.jours_travail }}
+                      </div>
+                      <div class="form-group">
+                        <label pour="specialite">Spécialité</label>
+                        {{ form.specialite }}
+                      </div>
+                    </div>
+                  
+                    <!-- Champs spécifiques à la pharmacie -->
+                    <div id="pharmacie_fields" style="display: none;">
+                      <div class="form-group">
+                        <label pour="heure_ouverturep">Heure d'ouverture</label>
+                        {{ form.heure_ouverturep }}
+                      </div>
+                      <div class="form-group">
+                        <label pour="heure_fermeturep">Heure de fermeture</label>
+                        {{ form.heure_fermeturep }}
+                      </div>
+                      <div class="form-group">
+                        <label pour="nom_responsable">Nom du responsable</label>
+                        {{ form.nom_responsable }}
+                        </div>
+                    </div>
+                   
+                    <!-- Bouton de soumission -->
+                    <input type="submit" value="S'inscrire" class="btn btn-pill text-white btn-block btn-primary">
+                  </form>
+                  
+                  <!-- JavaScript pour afficher/masquer les champs -->
+                  <script>
+                  document.querySelectorAll("input[type='checkbox']").forEach(function(checkbox) {
+                    checkbox.addEventListener('change', function() {
+                      // Basculer les rôles
+                      var is_medecin = document.getElementById('id_is_medecin').checked;
+                      var is_pharmacie = document.getElementById('id_is_pharmacie').checked;
+                      var is_patient = document.getElementById('id_is_patient').checked;
+                      
+                      // Afficher ou masquer les champs selon le rôle choisi
+                      document.getElementById('patient_fields').style.display = is_patient ? 'block' : 'none';
+                      document.getElementById('medecin_fields').style.display = is_medecin ? 'block' : 'none';
+                      document.getElementById('pharmacie_fields').style.display = is_pharmacie ? 'block' : 'none';
+                    });
+                  });
+                  
+                  // Initialiser les champs selon les cases cochées au chargement
+                  document.dispatchEvent(new Event('change'));
+                  </script>
+                  
+ 
+  </script>
+  
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+    
+  </body>
+</html>

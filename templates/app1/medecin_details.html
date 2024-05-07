@@ -1,0 +1,44 @@
+{% extends "app3/base2.html" %}
+
+{% block content %}
+
+<!-- Informations du médecin -->
+<div class="row">
+    <div class="col-md-6">
+        <!-- Ajoutez une image ou un avatar du médecin si disponible -->
+        <img src="{{ medecin.avatarM.url }}" alt="Image du médecin" width="500px" height="500px">
+    </div>
+    <div class="col-md-6">
+        <!-- Informations du médecin -->
+        <div>
+            <b>Nom: </b> {{ medecin.nom_medecin }}
+        </div>
+        <div>
+            <b>Prénom: </b> {{ medecin.prenom_medecin }}
+        </div>
+        <div>
+            <b>Spécialité: </b> {{ medecin.specialite }}
+        </div>
+        <div>
+            <b>Numéro de téléphone: </b> {{ medecin.num_telM }}
+        </div>
+        <div>
+            <b>Adresse e-mail: </b> {{ medecin.adr_mailM }}
+        </div>
+        <div>
+            <b>Adresse du cabinet: </b> {{ medecin.adresse_cabinet }}
+        </div>
+        <div>
+            <label for="message_medecin"><b>Voulez-vous envoyer un message au médecin ?</b></label><br>
+            <textarea id="message_medecin" placeholder="écrivez votre message ici"
+                style="width: 400px; height: 200px;"></textarea>
+        </div>
+    </div>
+</div>
+
+<br><br><br><br><br><br><br><br><br>
+
+<br><br><br><br><br><br><br><br> <br><br>
+{% include 'app3/footer.html' %}
+</div>
+{% endblock %}

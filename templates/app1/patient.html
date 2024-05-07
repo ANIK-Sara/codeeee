@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/login.css'  %} ">
+
+    <title>Recherche</title>
+    <!-- Lien vers le fichier CSS si nécessaire -->
+</head>
+<body>
+    <div class="topnav" style="display: flex; align-items: center; ">
+        <a class="active" href="#home" style="margin-left: 20px;background-color: #333 ;"> Accueil</a>
+        <a href="#about" style="margin-left: 20px;">À propos de nous</a>
+        <a href="#contact" style="margin-left: 20px;">Contactez-nous</a>
+        <div class="language-select" style="margin-right: 30px; margin-left: 50px;">
+            <select id="language" onchange="changeLanguage()">
+                <option value="fr">Français</option>
+                <option value="en">Anglais</option>
+                <option value="ar">Arabe</option>
+            </select>
+        </div>
+        
+        <button onclick="document.getElementById('id01').style.display='block'"
+            style="width: 150px; margin-left: 450px; background-color: #333 ; color: white;"><h2>Profil </h2></button>
+    </div>
+    <h1>Recherche</h1>
+    <!-- Formulaire de recherche -->
+    <form action="{% url 'patient' %}" method="get" style="display: flex;">
+        <input type="text" name="query" placeholder="Rechercher..." value="{{ request.GET.query }}" style="flex-grow: 1; border-radius: 20px 0 0 20px; border-right: 0;">
+        <button type="submit" style="border-radius: 0 20px 20px 0; border-left: 1px solid #ccc; width: 100px;">Rechercher</button>
+    </form>
+
+    <!-- Affichage des résultats -->
+    {% if medecins or pharmacies or produits or pharmacies_avec_produits %}
+    <h2>Résultats de recherche</h2>
+    
+    <!-- Afficher les médecins -->
+    {% if medecins %}
+    <h3 style="color:#333;"><b>Médecins</b>
+    </h3>
+    <ul>
+        {% for medecin in medecins %}
+        <a href="{% url 'medecin_details' medecin.id_medecin %}"> 
+
+            <li>{{ medecin.nom_medecin }} - {{ medecin.specialite }} -{{ medecin.adresse_cabinet }} </li> </a>
+        {% endfor %}
+    </ul>
+    {% endif %}
+<br><br>
+    <!-- Afficher les pharmacies -->
+    {% if pharmacies %}
+    <h3>Pharmacies</h3>
+    <ul>
+        {% for pharmacie in pharmacies %}
+        <a href="{% url 'pharmacie_details' pharmacie.id_pharmacie %}">
+
+            <li>{{ pharmacie.nom }} - {{ pharmacie.adresse }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <!-- Afficher les produits -->
+    {% if produits %}
+    
+    
+    {% endif %}
+
+    <!-- Afficher les pharmacies qui ont des produits correspondants -->
+    {% if pharmacies_avec_produits %}
+<h3>Pharmacies avec les produits recherchés</h3>
+<ul>
+    {% for pharmacie in pharmacies_avec_produits %}
+    <a href="{% url 'pharmacie_details' pharmacie.id_pharmacie %}">
+
+        <li>{{ pharmacie.nom }} - {{ pharmacie.adresse }}</li>
+    {% endfor %}
+</ul>
+
+    </ul>
+    {% endif %}
+    
+    {% else %}
+    <p>Aucun résultat trouvé.</p>
+    {% endif %}
+
+<br><br><br>
+
+</body>
+
+</html>

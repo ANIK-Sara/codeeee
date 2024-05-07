@@ -1,0 +1,148 @@
+{% extends "app3/base2.html" %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-6">
+        <div>
+            <img src="{{ pharmacie.avatar.url }}" alt="Image de la pharmacie" width="500px" height="500px">
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="text-warning display-3">
+            {{ pharmacie.nom }}
+        </div>
+        <div class="text-danger">
+            <b> Adresse: </b> {{ pharmacie.adresse }}
+        </div>
+        <div>
+            <b> Nom du responsable: </b> {{ pharmacie.nom_responsable }}
+        </div>
+        <div>
+            <b> Téléphone: </b> {{ pharmacie.tel }}
+        </div>
+        <div>
+            <b>Mail: </b>{{ pharmacie.mail }}
+        </div>
+        <div>
+            <b>Heure d'ouverture: </b> {{ pharmacie.heure_ouverture|time:"H:i" }}
+        </div>
+        <div>
+            <b> Heure de fermeture: </b> {{ pharmacie.heure_fermeture|time:"H:i" }}
+        </div>
+        <div class="mt-3">
+            <label for="message_pharma"><b>Voulez-vous envoyer un message à la pharmacie ?</b></label><br>
+            <textarea id="message_pharma" placeholder="écrivez votre message ici "
+                style="width: 400px; height: 200px;"></textarea>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- Affichage des produits -->
+<h2 style="text-align: center;">Produits de la pharmacie {{ pharmacie.nom }}</h2>
+<div class="row">
+    <div class="col-md-12">
+        <form class="card card-sm" id="search-form">
+            <div class="card-body row no-gutters align-items-center">
+                <div class="col">
+
+
+                    <input type="search" name="item-namee" class="form-control form-control-borderless">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-success" style="width: 120px;"> Recherche</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+<div class="row">
+    {% for produit in product_objectt %}
+    <div class="col-md-3">
+        <div class="card">
+            <img src="{{ produit.image }}" alt="" class="card-img-top">
+            <div class="card-body">
+                <div class="card-title" id="aaa{{ produit.id_produit }}">{{ produit.nom_pr }}</div>
+                <div class="card-text" id="prixunitaire{{ produit.id_produit }}" style="color: blue;">
+                    {{ produit.prix_unitaire }} DA</div>
+                    {% if produit.ordonnance_requise %}
+                    <p class="text-danger">Nécessite une ordonnance</p>
+                {% endif %}
+                <a href="{% url 'details' produit.id_produit %}" class="btn btn-warning">Voir détails</a>
+                <!-- Autres actions pour les produits -->
+                <button id="{{produit.id_produit}}" class="btn tedd btn-success">J'achète +<i class="bi bi-cart-fill"></i></button>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p>Aucun produit trouvé.</p>
+   
+    {% endfor %}
+    
+</div>
+{% endblock %}
+{% block js %}
+<script type="text/javascript">
+
+    console.log('Juste pour tester ');
+
+    if (localStorage.getItem('panier_pharmacie') == null) {
+        var panier = {};
+    } else {
+        panier = JSON.parse(localStorage.getItem('panier_pharmacie'));
+    }
+
+    $(document).on('click', '.tedd', function () {
+        console.log('ajouter');
+        var item_id = this.id.toString();
+        console.log(item_id);
+        if (panier[item_id] != undefined) {
+            quantité = panier[item_id][0] + 1; // Augmente la quantité existante de 1
+            panier[item_id][0] = quantité; // Mettre à jour la quantité dans le panier
+            panier[item_id][2] += parseFloat(document.getElementById("prixunitaire" + item_id).innerHTML); // Mettre à jour le prix total
+
+        } else {
+            quantité = 1;
+            prix = parseFloat(document.getElementById("prixunitaire" + item_id).innerHTML);
+            nom = document.getElementById("aaa" + item_id).innerHTML;
+            panier[item_id] = [quantité, nom, prix];
+        }
+        console.log(panier);
+        localStorage.setItem('panier_pharmacie', JSON.stringify(panier));
+        document.getElementById("panier_pharmacie").innerHTML = "<strong>Panier</strong>(" + Object.keys(panier).length + ")";
+
+        console.log(Object.keys(panier).length);
+    });
+
+    AfficherList(panier);
+
+    function AfficherList(panier) {
+        var panierString = "";
+        panierString += "<h5> Voici votre liste </h5>";
+        var index = 1;
+        for (var x in panier) {
+            panierString += index;
+            var element = document.getElementById("aaa" + x);
+            if (element) { // Vérification si l'élément existe
+                panierString += element.innerHTML + " Qte " + panier[x][0] + "<br>";
+            }
+            index += 1;
+        }
+        panierString += "<br> <a href='/checkoutout' class='btn btn-primary'>Afficher</a>";
+        $('[data-toggle="popover"]').popover();
+        document.getElementById('panier_pharmacie').setAttribute('data-content', panierString);
+    }
+
+</script>
+<br><br><br><br><br><br><br><br> <br><br>
+{% include 'app3/footer.html' %}
+
+{% endblock %}
+
+<!-- Ajoutez d'autres détails de la pharmacie selon vos besoins -->
+<br><br><br><br><br><br><br><br> <br><br>

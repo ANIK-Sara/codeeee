@@ -1,0 +1,81 @@
+
+{% load static %}
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interface de la Pharmacie</title>
+<link rel="stylesheet" href="{% static 'style1.css' %}">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<style>
+    .header {
+    display: flex;
+    background-color: #0d474b;
+    margin: -10px; /* Supprime les marges extérieures */
+    justify-content: center; /* Centre le contenu horizontalement */
+    align-items: center; /* Centre le contenu verticalement */
+}
+
+.header p {
+    color: whitesmoke;
+    font-weight: bold;
+    font-size: 25px;
+    margin-left: 10px; /* Ajuste l'espacement */
+}
+
+.header i {
+    font-size: 50px;
+    color: rgb(56, 155, 47);
+    margin-right: 10px; /* Ajuste l'espacement */
+}
+
+.container {
+    
+    height: 100vh; /* Prend toute la hauteur de la page */
+    width: 25%; /* Un quart de la largeur */
+    float: left; /* Aligne à gauche */
+   margin-left: -10px;
+    padding: 20px; /* Ajoute un peu d'espacement à l'intérieur */
+}
+
+.box {
+    background-color: #f1f1f1;
+    margin-bottom: 30px; /* Ajoute un espacement entre les boxes */
+    padding: 20px; /* Ajoute un peu d'espacement à l'intérieur */
+    border-radius: 10px;
+}
+.box a{
+    text-decoration: none;
+    font-weight: bold;
+color: #0d474b;
+}
+</style>
+</head>
+<body>
+ <div class="header">
+ <p> Pharmacie </p>
+ <i class="material-icons">local_hospital</i>
+</div>
+<div class="container">
+  <div class="box">
+    <a href="consultation.html">Consultation des Stocks</a>
+  </div>
+  <div class="box">
+    <a href="commande.html">Nos Commandes</a>
+  </div>
+
+<div class="box">
+  <a href="commande.html">Commande en Attente</a>
+</div>
+<div class="box">
+  <a href="commande.html">Historique</a>
+</div>  
+
+</div> 
+
+</body>
+</html>
+
+
+
+
