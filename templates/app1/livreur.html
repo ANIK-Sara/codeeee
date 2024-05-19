@@ -1,0 +1,139 @@
+{% load static %}
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interface de la Pharmacie</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Autres feuilles de style -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="{% static 'style1.css' %}">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<style>
+    .header {
+    display: flex;
+    background-color: #0d474b;
+    margin: -10px; /* Supprime les marges extérieures */
+    justify-content: center; /* Centre le contenu horizontalement */
+    align-items: center; /* Centre le contenu verticalement */
+    height:90px ;
+}
+
+.header p {
+    color: whitesmoke;
+    font-weight: bold;
+    font-size: 25px;
+    margin-left: 10px; /* Ajuste l'espacement */
+}
+
+.header i {
+    font-size: 50px;
+    color: rgb(56, 155, 47);
+    margin-right: 10px; /* Ajuste l'espacement */
+}
+
+.container {
+    
+    height: 100vh; /* Prend toute la hauteur de la page */
+    width: 25%; /* Un quart de la largeur */
+    float: left; /* Aligne à gauche */
+   margin-left: -10px;
+    padding: 20px; /* Ajoute un peu d'espacement à l'intérieur */
+}
+
+.box {
+    background-color: #f1f1f1;
+    margin-bottom: 30px; /* Ajoute un espacement entre les boxes */
+    padding: 20px; /* Ajoute un peu d'espacement à l'intérieur */
+    border-radius: 10px;
+    width: 200px;
+}
+.box a{
+    text-decoration: none;
+    font-weight: bold;
+color: #0d474b;
+}
+</style>
+</head>
+<body>
+ <div class="header">
+ <p style="text-align: center;"> Service de livraison    </p>
+
+ <i class="bi bi-truck" style="margin-left: 10px;"></i>
+ <div style="display: flex; justify-content: flex-end; margin-right: 20px;">
+    <a href="{% url 'deconnexion' %}" class="btn btn-danger btn-sm" style="width: 150px;">Se déconnecter</a>
+</div>
+</div>
+<div class="container">
+  <div class="box">
+    <a href="{% url 'profileliv' %}">Profil </a>
+  </div>
+  <div class="box">
+    <a href="">Les commandes</a>
+  </div>
+
+
+<div class="box">
+  <a href="{% url 'historique_livreur' %}">Historique</a>
+</div>  
+
+</div> 
+<br><br>
+
+<h1 style="text-align: center;">Les commandes reçues</h1>
+    
+    <table border="1" style="margin-right: 20px;">
+        <thead>
+            <tr>
+                <th>Nom Utilisateur</th>
+                <th>Prénom Utilisateur</th>
+                <th>Total</th>
+                <th>Date Commande</th>
+                <th>Ville</th>
+                
+                <th>Adresse</th>
+                <th>Numéro de Téléphone</th>
+                <th>Produits</th>
+               
+                <th>Pharmacie</th>
+                <th>Etat</th>
+                <th>Actions</th> <!-- Nouvelle colonne pour les actions -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for commande in commandes %}
+                <tr>
+                    <td>{{ commande.nom_utilisateur }}</td>
+                    <td>{{ commande.prenom_utilisateur }}</td>
+                    <td>{{ commande.total }}</td>
+                    <td>{{ commande.date_commande | date:"Y-m-d H:i:s" }}</td>
+                    <td>{{ commande.ville }}</td>
+                    <td>{{ commande.adresse }}</td>
+                    <td>{{ commande.num_tel }}</td>
+                    <td>{{ commande.items }}</td>
+                    <td>{{ commande.pharmacie }}</td>
+                    <td>{{ commande.etat }}</td>
+                    <td>
+                        {% if commande.etat != "livré" %}
+                            <form method="post" action="{% url 'livraison_terminee' %}">
+                                {% csrf_token %}
+                                <!-- Champ caché pour l'identifiant de la commande -->
+                                <input type="hidden" name="commande_id" value="{{ commande.id_commandepharm }}">
+                                <!-- Bouton "Commande livrée" -->
+                                <button type="submit">Commande livrée</button>
+                            </form>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {{ commande.etat }}
+
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commandes de la Pharmacie</title>
+    <style>
+        table {
+            width: 80%; /* Largeur du tableau */
+            margin: auto; /* Centrer le tableau */
+            border-collapse: collapse; /* Fusionner les bordures des cellules */
+        }
+        th, td {
+            border: 1px solid black; /* Bordures */
+            padding: 8px; /* Espacement interne */
+            text-align: center; /* Alignement du texte au centre */
+        }
+        a {
+            text-decoration: none; /* Supprimer le soulignement des liens */
+            color: black; /* Couleur du texte */
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">Nos commandes</h1>
+    
+    <!-- Afficher les commandes reçues par la pharmacie dans un tableau -->
+    <table>
+        <thead>
+            <tr>
+                <th>Identifiant</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Ville</th>
+                <th>Total</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for commande in commandes %}
+            <tr>
+                <td><a href="{% url 'commande_details' commande.id_commandepharm %}">{{ commande.id_commandepharm }}</a></td>
+                <td>{{ commande.nom_utilisateur }}</td>
+                <td>{{ commande.prenom_utilisateur }}</td>
+                <td>{{ commande.ville }}</td>
+                <td>{{ commande.total }} DA</td>
+                <td>{{ commande.date_commande | date:"Y-m-d H:i:s" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6">Aucune commande reçue.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

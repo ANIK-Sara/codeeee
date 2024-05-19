@@ -1,4 +1,4 @@
-{% extends "app3/base2.html" %}
+{% extends "app1/base2.html" %}
 
 {% block content %}
 
@@ -73,7 +73,6 @@
                     {% if produit.ordonnance_requise %}
                     <p class="text-danger">Nécessite une ordonnance</p>
                 {% endif %}
-                <a href="{% url 'details' produit.id_produit %}" class="btn btn-warning">Voir détails</a>
                 <!-- Autres actions pour les produits -->
                 <button id="{{produit.id_produit}}" class="btn tedd btn-success">J'achète +<i class="bi bi-cart-fill"></i></button>
             </div>
@@ -140,7 +139,7 @@
 
 </script>
 <br><br><br><br><br><br><br><br> <br><br>
-{% include 'app3/footer.html' %}
+
 
 {% endblock %}
 

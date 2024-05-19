@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import User
+from django.contrib.auth.forms import UserChangeForm
+from .models import User , Produit , Pharmacie  , Livreur , Patient , Medecin , Admin 
 class LoginForm(forms.Form):
     username = forms.CharField(
         widget=forms.TextInput(
@@ -48,6 +49,9 @@ class SignUpForm(UserCreationForm):
     is_medecin = forms.BooleanField(required=False, label="Médecin")
     is_pharmacie = forms.BooleanField(required=False, label="Pharmacie")
     is_patient = forms.BooleanField(required=False, label="Patient")
+    is_livreur = forms.BooleanField(required=False, label="Livreur")
+
+
 
     # Champs spécifiques aux rôles
     sexe = forms.ChoiceField(
@@ -99,12 +103,48 @@ class SignUpForm(UserCreationForm):
         required=False,
         widget=forms.TimeInput(attrs={"type": "time"}),
         label="Heure de fermeturep" )
-
+    # Champ 'disponible'
+    disponible = forms.BooleanField(
+        required=False,
+        label="Disponible"
+    )
+ # Champ 'ville'
+    ville = forms.CharField(
+        widget=forms.Select(choices=[
+            ('Alger', 'Alger'),
+            ('Constantine', 'Constantine'),
+            ('Oran', 'Oran'),
+            ('Annaba', 'Annaba'),
+        ]),
+        required=False,
+        label="Ville"
+    )
     class Meta:
         model = User
         fields = (
             'username', 'email', 'password1', 'password2', 'num_tel', 'adresse',
-            'is_medecin', 'is_pharmacie', 'is_patient',
+            'is_medecin', 'is_pharmacie', 'is_patient', 'is_livreur',
             'sexe', 'date_naissance', 'adresse_cabinet', 'heure_ouverture', 'heure_fermeture',
             'jours_travail', 'specialite', 'nom_responsable' , 'heure_ouverturep', 'heure_fermeturep',
+             'disponible' , 'ville' ,
         )
+
+class CustomPharmacieChangeForm(UserChangeForm):
+    class Meta:
+        model = Pharmacie
+        fields = ['nom', 'heure_ouverturep', 'heure_fermeturep', 'nom_responsable', 'num_tel', 'adresse', 'produits']
+
+class CustomLivreurChangeForm(UserChangeForm):
+    class Meta:
+        model = Livreur
+        fields = ['nom_liv', 'num_tel', 'adresse_liv', 'disponible', 'ville']
+
+
+class CustomPatientChangeForm(UserChangeForm):
+    class Meta:
+        model = Patient
+        fields = ['nom_patient', 'sexe', 'date_naissance', 'num_tel', 'adresse' ]
+class ProduitForm(forms.ModelForm):
+    class Meta:
+        model = Produit
+        fields = ['nom_pr', 'Description', 'prix_unitaire', 'image', 'type', 'dosage', 'ordonnance_requise', 'Qte']

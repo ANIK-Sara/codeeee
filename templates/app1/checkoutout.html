@@ -1,4 +1,4 @@
-{% extends "app3/base2.html"    %}
+{% extends "app1/base2.html"    %}
 
 {%  block content   %}
 <div class="row">
@@ -14,7 +14,7 @@
         <br><br>
         <h3 style="margin-left: 50px;">Veuillez remplir ce formulaire pour valider votre commande </h3>
         <br>
-        <form  method="post"  id="order-form"  name="order-form" enctype="multipart/form-data">
+        <form  method="post"  id="order-form"  name="order-form">
             {% csrf_token  %}
             <input type="hidden" id="items" , name="items">
             <div class="form-row">
@@ -42,67 +42,12 @@
             <div class="form-row">
                 <div class="form-group col-md-4">
                     <label for="inputState">Ville</label>
-                    <select id="ville" name="ville" class="form-control">
-                        <option value="1">Adrar</option>
-                        <option value="2">Chlef</option>
-                        <option value="3">Laghouat</option>
-                        <option value="4">Oum El Bouaghi</option>
-                        <option value="5">Batna</option>
-                        <option value="6">Béjaïa</option>
-                        <option value="7">Biskra</option>
-                        <option value="8">Béchar</option>
-                        <option value="9">Blida</option>
-                        <option value="10">Bouira</option>
-                        <option value="11">Tamanrasset</option>
-                        <option value="12">Tébessa</option>
-                        <option value="13">Tlemcen</option>
-                        <option value="14">Tiaret</option>
-                        <option value="15">Tizi Ouzou</option>
-                        <option value="16" selected>Alger</option>
-                        <option value="17">Djelfa</option>
-                        <option value="18">Jijel</option>
-                        <option value="19">Sétif</option>
-                        <option value="20">Saïda</option>
-                        <option value="21">Skikda</option>
-                        <option value="22">Sidi Bel Abbès</option>
-                        <option value="23">Annaba</option>
-                        <option value="24">Guelma</option>
-                        <option value="25">Constantine</option>
-                        <option value="26">Médéa</option>
-                        <option value="27">Mostaganem</option>
-                        <option value="28">M'Sila</option>
-                        <option value="29">Mascara</option>
-                        <option value="30">Ouargla</option>
-                        <option value="31">Oran</option>
-                        <option value="32">El Bayadh</option>
-                        <option value="33">Illizi</option>
-                        <option value="34">Bordj Bou Arréridj</option>
-                        <option value="35">Boumerdès</option>
-                        <option value="36">El Tarf</option>
-                        <option value="37">Tindouf</option>
-                        <option value="38">Tissemsilt</option>
-                        <option value="39">El Oued</option>
-                        <option value="40">Khenchela</option>
-                        <option value="41">Souk Ahras</option>
-                        <option value="42">Tipaza</option>
-                        <option value="43">Mila</option>
-                        <option value="44">Aïn Defla</option>
-                        <option value="45">Naâma</option>
-                        <option value="46">Aïn Témouchent</option>
-                        <option value="47">Ghardaïa</option>
-                        <option value="48">Relizane</option>
-                        <option value="49">Timimoun</option>
-                        <option value="50">Bordj Badji Mokhtar</option>
-                        <option value="51">Ouled Djellal</option>
-                        <option value="52">Béni Abbès</option>
-                        <option value="53">In Salah</option>
-                        <option value="54">In Guezzam</option>
-                        <option value="55">Touggourt</option>
-                        <option value="56">Djanet</option>
-                        <option value="57">El M'Ghair</option>
-                        <option value="58">El Meniaa</option>
-                      </select>
-                      
+                    <select id="ville"  name="ville"  class="form-control">
+                        <option selected>Alger</option>
+                        <option>Constantine</option>
+                        <option>Oran</option>
+                        <option>Annaba</option>
+                    </select>
                 </div>
                 <div class="form-group col-md-2">
                     <label for="inputZip">Somme total à payer </label>
@@ -111,18 +56,20 @@
                 <br>
                
             </div>
-            <input type="hidden" id="panier" name="panier" value="{}">
-           
-            <div id="ordonnance_field" style="display: none;">
-                <div class="form-group">
-                    <label for="ordonnance">Ordonnance (obligatoire)</label>
-                    <input type="file" name="ordonnance" id="ordonnance" class="form-control">
-                </div>
+
+
+            <div class="form-group">
+                <label for="ordonnance">Ordonnance (si nécessaire)</label>
+                <input type="file" name="ordonnance" id="ordonnance" class="form-control" >
+            </div> 
+            <div class="form-group col-md-6">
+                <label for="inputEmail4">Nom de la pharmacie</label>
+                <input type="text" id="nomphar" name="nomphar"  class="form-control" id="inputEmail4" placeholder="Entrer le nom de notre pharmacie" required>
             </div>
-        
-            
-           
-          
+
+
+
+
             <div class="mt-3">
                 <label for="message_pharma"><b>Voulez-vous envoyer un message à la pharmacie ?</b></label><br>
                 <textarea id="message_pharma" placeholder="écrivez votre message ici "
@@ -135,47 +82,23 @@
     </div>
 </div> <br><br><br><br><br><br><br><br>
 <br><br><br><br><br><br><br><br>
-{% include 'app3/footer.html' %}
 {% endblock  %}
 
 {%  block js  %}
-<script type="text/javascript">    
+<script type="text/javascript">
+
 $(document).ready(function() {
+    // Initialisation du panier à partir du local storage
     let panier;
-    if (localStorage.getItem('panier_pharmacie') === null) {
+    if (localStorage.getItem('panier_pharmacie') == null) {
         panier = {};  // Si le panier n'existe pas, créez un objet vide
     } else {
         panier = JSON.parse(localStorage.getItem('panier_pharmacie'));  // Chargez le panier depuis le local storage
-    }
-    console.log("Panier chargé:", panier);  // Vérifier le contenu du panier
-
-    let ordonnanceRequise = false;  // Indicateur pour savoir si une ordonnance est nécessaire
-
-    // Vérifiez chaque produit pour voir si une ordonnance est requise
-    for (let key in panier) {
-        let produit = panier[key];
-        // Vérifiez si le produit a assez d'éléments et si l'indicateur ordonnance_requise est vrai
-        if (produit.length > 3 && produit[3] === true) { 
-            console.log("ordoannce obligatoire") // Si le produit nécessite une ordonnance
-            ordonnanceRequise = true;  // Activer le drapeau
-            break;  // Arrêter la boucle car une ordonnance est nécessaire
-        }
-    }
-
-    // Afficher ou cacher le champ d'ordonnance selon le besoin
-    var ordonnanceField = $('#ordonnance_field');  // L'élément contenant le champ d'ordonnance
-    if (ordonnanceRequise) {
-        ordonnanceField.show();
-        console.log("afficher ordoannce")  // Afficher le champ d'ordonnance
-    } else {
-        ordonnanceField.hide(); 
-        console.log("orodannce caché ") // Cacher le champ d'ordonnance si non requis
     }
 
     // Remplir la liste des éléments du panier
     let total = 0;
     let nombre = 0;
-
     for (let key in panier) {
         let produit = panier[key];
         let quantité = produit[0];  // La quantité du produit
@@ -197,7 +120,7 @@ $(document).ready(function() {
                 <span class="badge badge-warning badge-pill">${prix} DA</span>
                 <button class="btn btn-danger btn-sm remove-item" style="width: 150px;">Supprimer</button>
             </li>`;
-
+        
         $('#item-list').append(itemString);  // Ajouter l'élément à la liste
     }
 
@@ -208,9 +131,10 @@ $(document).ready(function() {
             <span class="badge badge-danger badge-pill">TQte: ${nombre}</span>
             <span class="badge badge-danger badge-pill">Total: ${total} DA</span>
         </li>`;
-
+    
     $('#item-list').append(itemTotal);  // Ajouter l'élément du total à la liste
     $('#total').val(total + " DA");  // Mettre à jour le champ du total
+    $('#items').val(JSON.stringify(panier));  // Mettre à jour le champ caché pour le formulaire
 
     // Gestion des boutons "+" et "-"
     $('.quantity .plus').click(function() {
@@ -234,13 +158,13 @@ $(document).ready(function() {
         if (currentVal > 1) {  // Assurer que la quantité ne tombe pas sous 1
             let newQuantity = currentVal - 1;
 
-        $quantity.text('Qte ' + newQuantity);  // Mettre à jour l'affichage
-        let itemId = $(this).closest('li').data('item-id');  // Obtenir l'identifiant du produit
-        panier[itemId][0] = newQuantity;  // Mettre à jour le panier
+            $quantity.text('Qte ' + newQuantity);  // Mettre à jour l'affichage
+            let itemId = $(this).closest('li').data('item-id');  // Obtenir l'identifiant du produit
+            panier[itemId][0] = newQuantity;  // Mettre à jour le panier
 
-        localStorage.setItem('panier_pharmacie', JSON.stringify(panier));  // Mettre à jour le local storage
+            localStorage.setItem('panier_pharmacie', JSON.stringify(panier));  // Mettre à jour le local storage
 
-        updateTotalAndQuantity();  // Appeler la fonction de mise à jour du total
+            updateTotalAndQuantity();  // Appeler la fonction de mise à jour du total
         }
     });
 
@@ -251,10 +175,12 @@ $(document).ready(function() {
 
         $('#item-list .quantity').each(function() {
             let quantite = parseInt($(this).find('.badge-primary').text().split(' ')[1]);
-            let prixText = $(this).siblings('.badge-warning').text().replace(/[^\d.]/g, '');  // Nettoyer le texte
+            let prixElement = $(this).siblings('.badge-warning');  // Obtenir le prix
+            let prixText = prixElement.text().replace(/[^\d.]/g, '');  // Nettoyer le texte pour garder uniquement les chiffres
             let prix = parseFloat(prixText);  // Convertir en nombre flottant
+
             if (isNaN(prix)) {
-                console.error("Prix est NaN:", prixText);  // Message d'erreur si le prix est incorrect
+                console.error("Prix est NaN:", prixText);  // Vérification du prix
                 return;  // Arrêter la mise à jour si le prix est incorrect
             }
 
@@ -277,18 +203,12 @@ $(document).ready(function() {
 
         $item.remove();  // Supprimer de l'interface utilisateur
 
-        updateTotalAndQuantity();  // Appeler la fonction de mise à jour du total
+        updateTotalAndQuantity();  // Mettre à jour le total et la quantité
     });
 });
 
-// Avant de soumettre le formulaire
-$('#order-form').on('submit', function() {
-    // Mettez à jour le champ caché avec le panier
-    $('#items').val(localStorage.getItem('panier_pharmacie'));
-});
 
 </script> 
-
 
 
 {%  endblock    %}

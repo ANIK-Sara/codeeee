@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes commandes</title>
+</head>
+<body>
+    <h1>Mes commandes</h1>
+
+    <ul>
+        {% for commande in commandes %}
+            <li>
+                <strong>Identifiant :</strong> {{ commande.id_commandepharm }}<br>
+                <strong>Nom :</strong> {{ commande.nom_utilisateur }}<br>
+                <strong>Adresse :</strong> {{ commande.adresse }}<br>
+                <strong>Total :</strong> {{ commande.total }} DA<br>
+                <strong>Date :</strong> {{ commande.date_commande | date:"Y-m-d H:i:s" }}<br>
+                <strong>Total :</strong> {{ commande.etat }} DA<br>
+                <!-- Ajoutez d'autres attributs ici si nécessaire -->
+            </li>
+            <br>
+        {% endfor %}
+    </ul>
+</body>
+</html>

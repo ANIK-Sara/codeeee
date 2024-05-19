@@ -63,6 +63,8 @@
                       {{ form.is_medecin }} Médecin
                       {{ form.is_pharmacie }} Pharmacie
                       {{ form.is_patient }} Patient
+                      {{ form.is_livreur }} Livreur
+                      
                     </div>
                   
                     <!-- Champs spécifiques au patient -->
@@ -101,6 +103,8 @@
                       </div>
                     </div>
                   
+
+  
                     <!-- Champs spécifiques à la pharmacie -->
                     <div id="pharmacie_fields" style="display: none;">
                       <div class="form-group">
@@ -116,7 +120,23 @@
                         {{ form.nom_responsable }}
                         </div>
                     </div>
-                   
+             <!-- Champs spécifiques au livreur -->
+<div id="livreur_fields" style="display: none;">
+  <div class="form-group">
+    <label for="disponible">Disponible</label>
+    <input type="checkbox" id="id_disponible" name="disponible">
+  </div>
+  <div class="form-group">
+    <label for="ville">Ville</label>
+    <select id="ville" name="ville" class="form-control">
+      <option selected>Alger</option>
+      <option>Constantine</option>
+      <option>Oran</option>
+      <option>Annaba</option>
+    </select>
+  </div>
+  <!-- Ajoutez d'autres champs spécifiques au livreur ici -->
+</div>
                     <!-- Bouton de soumission -->
                     <input type="submit" value="S'inscrire" class="btn btn-pill text-white btn-block btn-primary">
                   </form>
@@ -129,11 +149,13 @@
                       var is_medecin = document.getElementById('id_is_medecin').checked;
                       var is_pharmacie = document.getElementById('id_is_pharmacie').checked;
                       var is_patient = document.getElementById('id_is_patient').checked;
-                      
+                      var is_livreur = document.getElementById('id_is_livreur').checked;
                       // Afficher ou masquer les champs selon le rôle choisi
                       document.getElementById('patient_fields').style.display = is_patient ? 'block' : 'none';
                       document.getElementById('medecin_fields').style.display = is_medecin ? 'block' : 'none';
                       document.getElementById('pharmacie_fields').style.display = is_pharmacie ? 'block' : 'none';
+                      document.getElementById('livreur_fields').style.display = is_livreur ? 'block' : 'none';
+
                     });
                   });
                   

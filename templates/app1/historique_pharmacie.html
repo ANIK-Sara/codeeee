@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Historique des Commandes</title>
+</head>
+<body>
+    <h1>Historique des Commandes Livrées</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Total</th>
+                <th>Date de commande</th>
+                <th>Ville</th>
+                <th>Email</th>
+                <th>Adresse</th>
+                <th>Téléphone</th>
+                <th>Items</th>
+                <th>Ordonnance</th>
+                <th>Pharmacie</th>
+                <th>Livreur</th>
+                <th>État</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for commande in commandes_livrees %}
+                <tr>
+                    <td>{{ commande.id_commandepharm }}</td>
+                    <td>{{ commande.nom_utilisateur }}</td>
+                    <td>{{ commande.prenom_utilisateur }}</td>
+                    <td>{{ commande.total }}</td>
+                    <td>{{ commande.date_commande }}</td>
+                    <td>{{ commande.ville }}</td>
+                    <td>{{ commande.adr_mail }}</td>
+                    <td>{{ commande.adresse }}</td>
+                    <td>{{ commande.num_tel }}</td>
+                    <td>{{ commande.items }}</td>
+                    <td>
+                        {% if commande.ordonnance %}
+                            <a href="{{ commande.ordonnance.url }}">Voir l'ordonnance</a>
+                        {% else %}
+                            Pas d'ordonnance
+                        {% endif %}
+                    </td>
+                    <td>{{ commande.pharmacie.nom }}</td>
+                    <td>{{ commande.livreur.nom_liv }}</td>
+                    <td>{{ commande.get_etat_display }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
+

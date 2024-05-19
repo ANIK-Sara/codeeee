@@ -1,81 +1,332 @@
-
+<!DOCTYPE html>
 {% load static %}
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Interface de la Pharmacie</title>
-<link rel="stylesheet" href="{% static 'style1.css' %}">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <style>
     .header {
-    display: flex;
-    background-color: #0d474b;
-    margin: -10px; /* Supprime les marges extérieures */
-    justify-content: center; /* Centre le contenu horizontalement */
-    align-items: center; /* Centre le contenu verticalement */
-}
-
-.header p {
-    color: whitesmoke;
-    font-weight: bold;
-    font-size: 25px;
-    margin-left: 10px; /* Ajuste l'espacement */
-}
-
-.header i {
-    font-size: 50px;
-    color: rgb(56, 155, 47);
-    margin-right: 10px; /* Ajuste l'espacement */
-}
-
-.container {
-    
-    height: 100vh; /* Prend toute la hauteur de la page */
-    width: 25%; /* Un quart de la largeur */
-    float: left; /* Aligne à gauche */
-   margin-left: -10px;
-    padding: 20px; /* Ajoute un peu d'espacement à l'intérieur */
-}
-
-.box {
-    background-color: #f1f1f1;
-    margin-bottom: 30px; /* Ajoute un espacement entre les boxes */
-    padding: 20px; /* Ajoute un peu d'espacement à l'intérieur */
-    border-radius: 10px;
-}
-.box a{
-    text-decoration: none;
-    font-weight: bold;
-color: #0d474b;
-}
+        display: flex;
+        background-color: #0d474b;
+        margin: 0px; /* Supprime les marges extérieures */
+        justify-content: center; /* Centre le contenu horizontalement */
+        align-items: center;
+        height: 70px; /* Centre le contenu verticalement */
+    }
+    .header p {
+        color: whitesmoke;
+        font-weight: bold;
+        font-size: 25px;
+        margin-left: 10px; /* Ajuste l'espacement */
+    }
+    .header i {
+        font-size: 50px;
+        color: rgb(56, 155, 47);
+        margin-right: 10px; /* Ajuste l'espacement */
+    }
+    .container {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+    }
+    .box {
+        background-color: #f1f1f1;
+        margin-right: 50px; /* Ajoute un espacement entre les boxes */
+        padding: 20px; /* Ajoute un peu d'espacement à l'intérieur */
+        border-radius: 10px;
+        margin-left: -50px;
+        box-sizing: border-box; /* Prend en compte le padding et la bordure */
+        width: 250px;
+    }
+    .box a {
+        text-decoration: none;
+        font-weight: bold;
+        color: #0d474b;
+    }
+    .product-container {
+        display: flex;
+        flex-wrap: wrap;
+        width: 75%;
+    }
+    .product-container .col-md-3 {
+        width: calc(33.33% - 20px); /* Calcul de la largeur pour l'espacement */
+        margin-bottom: 20px; /* Ajout d'une marge en bas */
+        margin-right: 30px; /* Ajout d'une marge à droite */
+    }
+    .product-container .card {
+        width: 100%;
+    }
+    .product-container .card img {
+        width: 100%;
+        height: auto;
+    }
+    .product-container .card-body {
+        padding: 10px;
+    }
+    .product-container .card-title {
+        font-weight: bold;
+    }
+    .product-container .card-text {
+        color: blue;
+    }
+    .product-container .text-danger {
+        color: red;
+    }
+    /* Style de la fenêtre modale */
+    .modal {
+        display: none; /* Par défaut, la fenêtre modale est cachée */
+        position: fixed; /* Position fixe */
+        z-index: 1; /* Placez la fenêtre modale au-dessus de tout */
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto; /* Activer le défilement lorsque nécessaire */
+        background-color: rgba(0, 0, 0, 0.4); /* Fond noir avec opacité */
+        padding-top: 60px; /* Marge en haut */
+    }
+    .modal-content {
+        background-color: #fefefe;
+        margin: 5% auto; /* 5% du haut et centré horizontalement */
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%; /* Largeur de la fenêtre modale */
+    }
+    .button-group {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 </style>
 </head>
 <body>
- <div class="header">
- <p> Pharmacie </p>
- <i class="material-icons">local_hospital</i>
-</div>
-<div class="container">
-  <div class="box">
-    <a href="consultation.html">Consultation des Stocks</a>
+<div class="header">
+    <p>Pharmacie</p>
+    <i class="material-icons">local_hospital</i>
+    <div style="display: flex; justify-content: flex-end; margin-right: 20px;">
+      <a href="{% url 'deconnexion' %}" class="btn btn-danger btn-sm" style="width: 150px;">Se déconnecter</a>
   </div>
-  <div class="box">
-    <a href="commande.html">Nos Commandes</a>
-  </div>
-
-<div class="box">
-  <a href="commande.html">Commande en Attente</a>
 </div>
-<div class="box">
-  <a href="commande.html">Historique</a>
-</div>  
+<div class="row" style="margin-left: 300px; margin-top: 10px; margin-right: 5px;">
+    <div class="col-md-12">
+          <form class="card card-sm" action="{% url 'recherche-produit' %}" method="GET">
+            <div class="card-body row no-gutters align-items-center">
+                <div class="col">
+                    <input type="search" name="item-name" class="form-control form-control-borderless" placeholder="Entrer le nom du produit que vous voulez chercher" style="width: 700px;">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-success" style="width: 100px;">Recherche</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 
-</div> 
+<div class="container" style="margin-top: -55px;">
+    <div>
+        <div class="box">
+          <a href="{% url 'profile' %}">Profil</a>
+
+        </div>
+        <br>
+        <div class="box">
+            <a href="#" id="ajouter-produit-btn">Ajouter un produit</a>
+        </div>
+        <br>
+        <div class="box">
+            <a href="{% url 'commandes-pharmacie' %}">Commandes</a>
+        </div>
+        <br>
+        <div class="box">
+            <a href="">Messagerie</a>
+        </div>
+        <br>
+        <div class="box">
+            <a href="{% url 'historique_pharmacie' %}">Historique</a>
+        </div>
+    </div>
+
+    <div class="product-container" style="margin-top: 80px; ">
+        {% for produit in product_object %}
+        <div class="col-md-3">
+            <div class="card" style="width: 13rem;">
+                <img src="{{ produit.image }}" alt="" class="card-img-top">
+                <div class="card-body">
+                  <div class="card-title" id="a{{ produit.id_produit }}">{{ produit.id_produit }}</div>
+                    <div class="card-title" id="aaa{{ produit.id_produit }}">{{ produit.nom_pr }}</div>
+                    <div class="card-text" id="prixunitaire{{ produit.id_produit }}">{{ produit.prix_unitaire }} DA</div>
+
+                    {% if produit.ordonnance_requise %}
+                    <p class="text-danger">Nécessite une ordonnance</p>
+                    {% endif %}
+                    <br>
+                    <div class="button-group">
+                        <form method="post" action="{% url 'product-delete' id_produit=produit.id_produit %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm" style="width: 85px;">Supprimer</button>
+                        </form>
+                        <button class="btn btn-warning btn-sm btn-modifier" style="width: 85px;" data-produit-id="{{ produit.id_produit }}">Modifier</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p>Aucun produit trouvé.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<div>
+    <!-- Formulaire d'ajout de produit dans la fenêtre modale -->
+    <div id="ajout-produit-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <form method="post" action="{% url 'ajouter_produit' %}">
+                {% csrf_token %}
+                <input type="text" name="nom_pr" placeholder="Nom du produit"><br>
+                <input type="text" name="description" placeholder="Description"><br>
+                <input type="text" name="prix_unitaire" placeholder="Prix unitaire"><br>
+                <input type="text" name="image" placeholder="URL de l'image"><br>
+
+                <!-- Choix du type de produit -->
+                <select name="type">
+                    <option value="Pharmaceutique">Produit Pharmaceutique</option>
+                    <option value="Medicament">Médicament</option>
+                </select><br>
+
+                <!-- Autres champs spécifiques aux produits pharmaceutiques -->
+                <input type="text" name="dosage" placeholder="Dosage"><br>
+                <input type="checkbox" name="ordonnance_requise"> Ordonnance requise<br>
+
+                <!-- Autres champs spécifiques à tous les produits -->
+                <input type="text" name="Qte" placeholder="Quantité disponible"><br>
+
+                <!-- Bouton de soumission -->
+                <button type="submit">Ajouter Produit</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Formulaire de modification de produit dans la fenêtre modale -->
+    <div id="modifier-produit-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <form id="modifier-produit-form" method="post" action="{% url 'modifier_produit' %}">
+                {% csrf_token %}
+                <input name="id_produit" id="modifier-id_produit">{{ produit.id_produit  }} <br>
+                <input type="text" name="nom_pr" id="modifier-nom_pr" placeholder="Nom du produit"><br>
+                <input type="text" name="description" id="modifier-description" placeholder="Description"><br>
+                <input type="text" name="prix_unitaire" id="modifier-prix_unitaire" placeholder="Prix unitaire"><br>
+                <input type="text" name="image" id="modifier-image" placeholder="URL de l'image"><br>
+
+                <!-- Choix du type de produit -->
+                <select name="type" id="modifier-type">
+                    <option value="Pharmaceutique">Produit Pharmaceutique</option>
+                    <option value="Medicament">Médicament</option>
+                </select><br>
+
+                <!-- Autres champs spécifiques aux produits pharmaceutiques -->
+                <input type="text" name="dosage" id="modifier-dosage" placeholder="Dosage"><br>
+                <input type="checkbox" name="ordonnance_requise" id="modifier-ordonnance_requise"> Ordonnance requise<br>
+
+                <!-- Autres champs spécifiques à tous les produits -->
+                <input type="text" name="Qte" id="modifier-Qte" placeholder="Quantité disponible"><br>
+
+                <!-- Bouton de soumission -->
+                <button type="submit">Modifier Produit</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3">
+  <div class="col-md-3 offset-md-4">
+      <ul class="pagination">
+          {% if product_object.has_previous %}
+          <li class="page-item">
+              <a  class="page-link"  href="?page={{ product_object.previous_page_number }}">Précédent</a>
+          </li>
+          {% endif %}
+          <li class="page-item active">
+              <a  class="page-link" href="?page={{ product_object.number }}">{{ product_object.number }}</a>
+          </li>
+          {% if product_object.has_next %}
+          <li class="page-item">
+              <a class="page-link"   href="?page={{ product_object.next_page_number }}">Suivant</a>
+          </li>
+          {% endif %}
+      </ul>
+  </div>
+</div>
+
+<script>
+jQuery.noConflict();
+jQuery(document).ready(function($) {
+    // Afficher la fenêtre modale d'ajout de produit
+    $('#ajouter-produit-btn').on('click', function() {
+        $('#ajout-produit-modal').show();
+    });
+
+    // Fermer la fenêtre modale d'ajout de produit
+    $('#ajout-produit-modal .close').on('click', function() {
+        $('#ajout-produit-modal').hide();
+    });
+
+    // Afficher la fenêtre modale de modification de produit
+    $('.btn-modifier').on('click', function() {
+        const produitId = $(this).data('produit-id');
+        // Requête pour obtenir les détails du produit (par exemple, via AJAX)
+        $.getJSON(`/api/produit/${produitId}`, function(data) {
+            $('#modifier-id_produit').val(data.id_produit);
+            $('#modifier-nom_pr').val(data.nom_pr);
+            $('#modifier-description').val(data.description);
+            $('#modifier-prix_unitaire').val(data.prix_unitaire);
+            $('#modifier-image').val(data.image);
+            $('#modifier-type').val(data.type);
+            $('#modifier-dosage').val(data.dosage);
+            $('#modifier-ordonnance_requise').prop('checked', data.ordonnance_requise);
+            $('#modifier-Qte').val(data.Qte);
+        });
+
+        $('#modifier-produit-modal').show();
+    });
+
+    // Fermer la fenêtre modale de modification de produit
+    $('#modifier-produit-modal .close').on('click', function() {
+        $('#modifier-produit-modal').hide();
+    });
+
+    // Fermer la fenêtre modale lors du clic à l'extérieur
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('ajout-produit-modal')) {
+            document.getElementById('ajout-produit-modal').style.display = 'none';
+        } else if (event.target == document.getElementById('modifier-produit-modal')) {
+            document.getElementById('modifier-produit-modal').style.display = 'none';
+        }
+    };
+
+    // Soumettre le formulaire de modification via AJAX (ou simplement permettre le submit standard)
+    $('#modifier-produit-form').on('submit', function(event) {
+        event.preventDefault();
+        const formData = $(this).serialize();
+        $.post('{% url "modifier_produit" %}', formData, function(response) {
+            // Traiter la réponse (par exemple, mettre à jour l'interface utilisateur)
+            if (response.success) {
+                alert('Produit modifié avec succès');
+                location.reload(); // Recharger la page pour voir les modifications
+            } else {
+                alert('Erreur lors de la modification du produit');
+            }
+        });
+    });
+});
+</script>
 
 </body>
 </html>
-
-
-
-

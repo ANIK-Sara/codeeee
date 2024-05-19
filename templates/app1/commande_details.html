@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails de la commande</title>
+</head>
+<body>
+    <h1>Détails de la commande</h1>
+    
+    <ul>
+        <li><strong>Identifiant :</strong> {{ commande.id_commandepharm }}</li>
+        <li><strong>Nom :</strong> {{ commande.nom_utilisateur }}</li>
+        <li><strong>Prénom :</strong> {{ commande.prenom_utilisateur }}</li>
+        <li><strong>Ville :</strong> {{ commande.ville }}</li>
+        <li><strong>Total :</strong> {{ commande.total }} DA</li>
+        <li><strong>Date :</strong> {{ commande.date_commande | date:"Y-m-d H:i:s" }}</li>
+        <li><strong>Adresse e-mail :</strong> {{ commande.adr_mail }}</li>
+        <li><strong>Adresse :</strong> {{ commande.adresse }}</li>
+        <li><strong>Numéro de téléphone :</strong> {{ commande.num_tel }}</li>
+        <li><strong>Ordonnance :</strong> {% if commande.ordonnance %}<a href="{{ commande.ordonnance.url }}">Télécharger</a>{% else %}Aucune{% endif %}</li>
+        <li><strong>Pharmacie :</strong> {{ commande.pharmacie }}</li>
+        <li><strong>Produits :</strong> {{ commande.items }}</li>
+        <!-- Ajoutez les autres attributs ici -->
+    </ul>
+
+    <br><br>
+    <!-- Tableau pour afficher les détails des livreurs -->
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Numéro de téléphone</th>
+                <th>Adresse</th>
+                <th>Disponible</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <form method="post" action="{% url 'accepter_commande' commande.id_commandepharm %}">
+            {% csrf_token %}
+            <!-- Champ caché pour l'identifiant de la commande -->
+            <input type="hidden" name="commande_id" value="{{ commande.id_commandepharm }}">
+            <!-- Bouton Accepter -->
+            <button type="submit" class="btn btn-success">Accepter</button>
+        </form>
+        <li><strong>etat:</strong> {{ commande.etat }}</li>
+
+        <tbody>
+
+            {% for livreur in livreurs %}
+  <tr>
+    <td>{{ livreur.nom_liv }}</td>
+    <td>{{ livreur.num_tel }}</td>
+    <td>{{ livreur.adresse_liv }}</td>
+    <td>{% if livreur.disponible %}Disponible{% else %}Non disponible{% endif %}</td>
+    <td>
+      <form method="post" action="{% url 'envoyer_commande' %}">
+        {% csrf_token %}
+        <!-- Champ caché pour l'identifiant de la commande -->
+        <input type="hidden" name="commande_id" value="{{ commande.id_commandepharm }}">
+        <!-- Champ caché pour le nom du livreur -->
+        <input type="hidden" name="livreur_nom" value="{{ livreur.nom_liv }}">
+        <!-- Bouton Envoyer -->
+        <button type="submit" class="btn btn-danger btn-sm remove-item" style="width: 150px;">Envoyer</button>
+      </form>
+    </td>
+  </tr>
+{% endfor %}
+        </tbody>
+    </table>
+    
+    
+    
+    
+    
+</body>
+</html>

@@ -10,12 +10,33 @@ class User(AbstractUser):
     is_medecin= models.BooleanField('Is medecin' , default=False)
     is_pharmacie= models.BooleanField('Is pharmacie' , default=False)
     is_patient= models.BooleanField('Is patient' , default=False)
+    is_livreur= models.BooleanField('Is livreur' , default=False)
+
 
 class Admin(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE , default=2)
     nom_Admin = models.CharField(max_length=255 , default="Admin")
     password = models.CharField(max_length=255, blank=True, null=True)
+class Livreur(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE , default=2)
 
+    nom_liv = models.CharField(max_length=100)
+    num_tel = models.CharField(max_length=15)
+    adresse_liv = models.CharField(max_length=200)
+    disponible = models.BooleanField(default=False)
+    ville = models.CharField(max_length=100 , default="Alger" )
+
+
+
+    def __str__(self):
+        return self.nom_liv
+    def marquer_disponible(self):
+        self.disponible = True
+        self.save()
+
+    def marquer_non_disponible(self):
+        self.disponible = False
+        self.save() 
 class Medecin(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     nom_medecin = models.CharField(max_length=255 , default="Medecin Anonyme")
@@ -46,7 +67,7 @@ class Produit(models.Model):
 
     # Attributs spécifiques aux produits pharmaceutiques
     dosage = models.CharField(max_length=100, blank=True, null=True)
-    ordonnance_requise = models.BooleanField(default=False)
+    ordonnance_requise = models.BooleanField(default=False , null=True)
 
 
 
@@ -67,13 +88,10 @@ class Pharmacie(models.Model):
     produits = models.ManyToManyField(Produit)
     def __str__(self):
         return self.nom
-class Patient(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    nom_patient = models.CharField(max_length=255)
-    sexe = models.CharField(max_length=1, blank=True, null=True)
-    date_naissance = models.DateField(blank=True, null=True)
-    num_tel = models.CharField(max_length=15, blank=True, null=True)
-    adresse = models.CharField(max_length=255, blank=True, null=True)
+    def __str__(self):
+        return f"Pharmacie: {self.nom}, Responsable: {self.nom_responsable}, Numéro de téléphone: {self.num_tel}, Adresse: {self.adresse}"
+
+
 
 
 class Commande(models.Model):
@@ -127,8 +145,28 @@ class PharmaCommandes(models.Model):
 
     items = models.CharField(max_length=300 , default=None)
     ordonnance = models.FileField(upload_to='ordonnances/', null=True, blank=True)  # Le paramètre 'upload_to' spécifie où stocker les fichiers
+    pharmacie = models.ForeignKey(Pharmacie, on_delete=models.CASCADE , default=12)
+    livreur = models.ForeignKey(Livreur, on_delete=models.SET_NULL, null=True, blank=True)
+    ETAT_CHOICES = [
+        ('EN_ATTENTE', 'En attente'),
+        ('ACCEPTE', 'Accepté'),
+        ('EN_COURS_DE_LIVRAISON', 'En cours de livraison'),
+        ('LIVRE', 'Livré'), 
+    ]
+
+    # Champ pour l'état de la commande
+    etat = models.CharField(max_length=200, choices=ETAT_CHOICES, default='EN_ATTENTE')
 
     class Meta:
         ordering = ['-date_commande']
     def __str__(self):
         return self.nom_utilisateur 
+    
+class Patient(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    nom_patient = models.CharField(max_length=255)
+    sexe = models.CharField(max_length=1, blank=True, null=True)
+    date_naissance = models.DateField(blank=True, null=True)
+    num_tel = models.CharField(max_length=15, blank=True, null=True)
+    adresse = models.CharField(max_length=255, blank=True, null=True)
+    commandes = models.ManyToManyField(PharmaCommandes)
